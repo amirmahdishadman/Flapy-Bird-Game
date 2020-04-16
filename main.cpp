@@ -10,7 +10,7 @@
 //#include <SDL2/SDL_mixer.h>
 #include "Bird.h"
 using namespace std;
-
+bool run;
 int cn=0;//use for random canals
 int cn2=0;//use for random day and night
 
@@ -23,11 +23,15 @@ SDL_Renderer *gRenderer = NULL;
 //textures
 SDL_Texture* gTexture1 = NULL;
 SDL_Texture* gbackgroundT = NULL;
-SDL_Texture* canal1= NULL;
-SDL_Texture* canal2= NULL;
-SDL_Texture* canal3= NULL;
-SDL_Texture* canal4= NULL;
-SDL_Texture* canal5= NULL;
+SDL_Texture* canal1up= NULL;
+SDL_Texture* canal2up= NULL;
+SDL_Texture* canal3up= NULL;
+SDL_Texture* canal4up= NULL;
+SDL_Texture* canal1dw= NULL;
+SDL_Texture* canal2dw= NULL;
+SDL_Texture* canal3dw= NULL;
+SDL_Texture* canal4dw= NULL;
+
 
 //The window we'll be rendering to
 SDL_Window* gWindow = NULL;
@@ -39,11 +43,16 @@ SDL_Surface* canalserface = NULL;
 //rects
 SDL_Rect grect1;//bird1
 SDL_Rect backrect={0,0,2280,800};
-SDL_Rect canal1r={760,0,152,655};
-SDL_Rect canal2r={760,0,152,655};
-SDL_Rect canal3r={760,0,152,655};
-SDL_Rect canal4r={760,0,152,655};
-SDL_Rect canal5r={760,0,152,655};
+SDL_Rect canal1rup={760,0,152,460};
+SDL_Rect canal2rup={760,0,152,120};
+SDL_Rect canal3rup={760,0,152,400};
+SDL_Rect canal4rup={760,0,152,300};
+
+SDL_Rect canal1rdw={760,630,152,25};
+SDL_Rect canal2rdw={760,290,152,365};
+SDL_Rect canal3rdw={760,570,152,85};
+SDL_Rect canal4rdw={760,470,152,185};
+
 
 
 
@@ -87,29 +96,41 @@ bool init()
 		    //gScreenSurface = SDL_GetWindowSurface( gWindow );
 			if(cn2==1)
 			{
-				gSurface1 = SDL_LoadBMP("bird1.bmp");
+				gSurface1 = SDL_LoadBMP("bird11.bmp");
 			}
 			if(cn2==2)
 			{
-				gSurface1 = SDL_LoadBMP("soul.bmp");
+				gSurface1 = SDL_LoadBMP("bird2.bmp");
 			}
 			
    			gTexture1 = SDL_CreateTextureFromSurface(gRenderer, gSurface1);
 
-			   canalserface = SDL_LoadBMP("canal1.bmp");
-   			  canal1 = SDL_CreateTextureFromSurface(gRenderer, canalserface);
+			   canalserface = SDL_LoadBMP("canal1up.bmp");
+   			  canal1up = SDL_CreateTextureFromSurface(gRenderer, canalserface);
 
-			   canalserface = SDL_LoadBMP("canal2.bmp");
-   			  canal2 = SDL_CreateTextureFromSurface(gRenderer, canalserface);
+			   canalserface = SDL_LoadBMP("canal2up.bmp");
+   			  canal2up = SDL_CreateTextureFromSurface(gRenderer, canalserface);
 
-			   canalserface = SDL_LoadBMP("canal3.bmp");
-   			  canal3 = SDL_CreateTextureFromSurface(gRenderer, canalserface);
+			   canalserface = SDL_LoadBMP("canal3up.bmp");
+   			  canal3up = SDL_CreateTextureFromSurface(gRenderer, canalserface);
 
-			   canalserface = SDL_LoadBMP("canal4.bmp");
-   			  canal4 = SDL_CreateTextureFromSurface(gRenderer, canalserface);
+			   canalserface = SDL_LoadBMP("canal4up.bmp");
+   			  canal4up = SDL_CreateTextureFromSurface(gRenderer, canalserface);
 
-			   canalserface = SDL_LoadBMP("canal5.bmp");
-   			  canal5 = SDL_CreateTextureFromSurface(gRenderer, canalserface);
+
+				 canalserface = SDL_LoadBMP("canal1dw.bmp");
+   			  canal1dw = SDL_CreateTextureFromSurface(gRenderer, canalserface);
+
+				canalserface = SDL_LoadBMP("canal2dw.bmp");
+   			  canal2dw = SDL_CreateTextureFromSurface(gRenderer, canalserface);
+				 
+				 canalserface = SDL_LoadBMP("canal3dw.bmp");
+   			  canal3dw = SDL_CreateTextureFromSurface(gRenderer, canalserface);
+
+				 canalserface = SDL_LoadBMP("canal4dw.bmp");
+   			  canal4dw = SDL_CreateTextureFromSurface(gRenderer, canalserface);
+
+			  
     	
 	  		bird1.x = 340;
     		bird1.y = 360;
@@ -123,16 +144,16 @@ bool init()
 
 
 
-void loadMedia(int cn)
+void loadMedia()
 {
 	//Load random image
 	if(cn2==1)
 	{
-		background = SDL_LoadBMP("daybackground.bmp");
+		background = SDL_LoadBMP("daybackground1.bmp");
 	}
 	if(cn2==2)
 	{
-		background = SDL_LoadBMP("nightbackground.bmp");
+		background = SDL_LoadBMP("daybackground2.bmp");
 	}
   			
    			gbackgroundT = SDL_CreateTextureFromSurface(gRenderer, background);
@@ -263,54 +284,98 @@ void loadMedia(int cn)
     // }
 }
 
+bool checkcollision()
+{
+	if(SDL_HasIntersection(&grect1, &canal1rup) == true)
+	{
+		bird1.lose=true;
+		return false;
+	}
+	if(SDL_HasIntersection(&grect1, &canal1rdw) == true)
+	{
+		bird1.lose=true;
+		return false;
+	}
+	if(SDL_HasIntersection(&grect1, &canal2rup) == true)
+	{
+		bird1.lose=true;
+		return false;
+	}
+	if(SDL_HasIntersection(&grect1, &canal2rdw) == true)
+	{
+		bird1.lose=true;
+		return false;
+	}
+	if(SDL_HasIntersection(&grect1, &canal3rup) == true)
+	{
+		bird1.lose=true;
+		return false;
+	}
+	if(SDL_HasIntersection(&grect1, &canal3rdw) == true)
+	{
+		bird1.lose=true;
+		return false;
+	}
+	if(SDL_HasIntersection(&grect1, &canal4rup) == true)
+	{
+		bird1.lose=true;
+		return false;
+	}
+	if(SDL_HasIntersection(&grect1, &canal4rdw) == true)
+	{
+		bird1.lose=true;
+		return false;
+	}
+	return true;
+
+}
 
 bool start=false;
 bool movebird(SDL_Event e, bool *quit)
 {
-if(start)
-{
-
-	if(bird1.speed>-0.4)
+	if(start)
 	{
-		bird1.speed-=bird1.acc;
+
+		if(bird1.speed>-0.4)
+		{
+			bird1.speed-=bird1.acc;
+		}
+
+		
+		SDL_PollEvent(&e);
+		if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE)
+		{
+			bird1.speed += 1.3;
+		}
+			
+
+		
+
+		bird1.y-=bird1.speed;
+
+		
+
+		if (e.type == SDL_QUIT)
+		{
+			*quit = true;
+		}
+		
+	}
+	else
+	{
+		SDL_PollEvent(&e);
+		if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE)
+		{
+			start=true;
+			bird1.speed += 0.9;
+		}
 	}
 
-	
-	SDL_PollEvent(&e);
-    if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE)
-	{
-		bird1.speed += 1.3;
-	}
-        
 
-	
-
-	bird1.y-=bird1.speed;
-
-	
-
-	if (e.type == SDL_QUIT)
-    {
-        *quit = true;
-    }
+	grect1={bird1.x,bird1.y,60,60};
+	return checkcollision();
 	
 }
-else
-{
-	SDL_PollEvent(&e);
-    if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE)
-	{
-		start=true;
-		bird1.speed += 0.9;
-	}
-}
-
-
-grect1={bird1.x,bird1.y,60,60};
-	return true;
-}
-
-
 
 // void movecanal(int num,int canal)
 // {
@@ -413,7 +478,7 @@ grect1={bird1.x,bird1.y,60,60};
 // }
 
 bool endcanal1=false;
-bool endcanal2=false;
+bool endcanal2=false;//ezaf
 int canalnum=0;
 
 void canal_move()
@@ -448,23 +513,18 @@ void canal_move()
 			canalnum=4;
 		
 	}
-	if(cn==5&&!endcanal1)
-	{
-		
-			endcanal1=true;
-			canalnum=5;
-		
-	}
 	if(endcanal1)
 	{
 		switch (canalnum)
 		{
 			case 1:
 			{
-				canal1r.x-=speed;
-				if(canal1r.x<-152)
+				canal1rdw.x-=speed;
+				canal1rup.x-=speed;
+				if(canal1rup.x<-152)
 				{
-					canal1r.x=760;
+					canal1rup.x=760;
+					canal1rdw.x=760;
 					endcanal1=false;
 				}
 
@@ -473,10 +533,12 @@ void canal_move()
 
 			case 2:
 			{
-				canal2r.x-=speed;
-				if(canal2r.x<-152)
+				canal2rdw.x-=speed;
+				canal2rup.x-=speed;
+				if(canal2rup.x<-152)
 				{
-					canal2r.x=760;
+					canal2rup.x=760;
+					canal2rdw.x=760;
 					endcanal1=false;
 				}
 
@@ -485,10 +547,12 @@ void canal_move()
 
 			case 3:
 			{
-				canal3r.x-=speed;
-				if(canal3r.x<-152)
+					canal3rdw.x-=speed;
+				canal3rup.x-=speed;
+				if(canal3rup.x<-152)
 				{
-					canal3r.x=760;
+					canal3rup.x=760;
+					canal3rdw.x=760;
 					endcanal1=false;
 				}
 
@@ -498,10 +562,12 @@ void canal_move()
 
 			case 4:
 			{
-				canal4r.x-=speed;
-				if(canal4r.x<-152)
+				canal4rdw.x-=speed;
+				canal4rup.x-=speed;
+				if(canal4rup.x<-152)
 				{
-					canal4r.x=760;
+					canal4rup.x=760;
+					canal4rdw.x=760;
 					endcanal1=false;
 				}
 
@@ -509,25 +575,12 @@ void canal_move()
 			}
 
 
-			case 5:
-			{
-				canal5r.x-=speed;
-				if(canal5r.x<-152)
-				{
-					canal5r.x=760;
-					endcanal1=false;
-				}
 
-				break;
-			}
+			
+			
 			
 		}
 	}
-
-
-
-
-
 
 
 
@@ -536,10 +589,9 @@ void canal_move()
 
 
 
-
 void setcn()
 	{
-	cn=rand()%5+1;
+	cn=rand()%4+1;
 	}
 void setcn2()
 	{
@@ -549,8 +601,8 @@ void setcn2()
 
 int main()
 {
-
-	 srand(time(0));
+	run=true;
+	srand(time(0));
     setcn2();
 	//Start up SDL and create window   
 	if( !init() )
@@ -566,7 +618,7 @@ int main()
 			SDL_Event e;
 
 			//Load media
-			while (!*quit)
+			while (!*quit&&run)//you can add a condition for run game again by menu in this while !!!!!!!!!!
 			{
 				while (SDL_PollEvent(&e) != 0)
 				{
@@ -575,18 +627,22 @@ int main()
 						*quit = true;
 					}
 				}
-				loadMedia(5);//map.cn);
+				loadMedia();
 				//Mix_PlayMusic(gMusic, -1);
 				int b=0;//for move ment of back ground
 				do
 				{
 					//grect1 = {bird1.x , bird1.y , 60, 60};
 					SDL_RenderCopy(gRenderer, gbackgroundT, NULL, &backrect);
-					SDL_RenderCopy(gRenderer, canal1, NULL, &canal1r);
-					SDL_RenderCopy(gRenderer, canal2, NULL, &canal2r);
-					SDL_RenderCopy(gRenderer, canal3, NULL, &canal3r);
-					SDL_RenderCopy(gRenderer, canal4, NULL, &canal4r);
-					SDL_RenderCopy(gRenderer, canal5, NULL, &canal5r);
+					SDL_RenderCopy(gRenderer, canal1up, NULL, &canal1rup);
+					SDL_RenderCopy(gRenderer, canal2up, NULL, &canal2rup);
+					SDL_RenderCopy(gRenderer, canal3up, NULL, &canal3rup);
+					SDL_RenderCopy(gRenderer, canal4up, NULL, &canal4rup);
+					SDL_RenderCopy(gRenderer, canal1dw, NULL, &canal1rdw);
+					SDL_RenderCopy(gRenderer, canal2dw, NULL, &canal2rdw);
+					SDL_RenderCopy(gRenderer, canal3dw, NULL, &canal3rdw);
+					SDL_RenderCopy(gRenderer, canal4dw, NULL, &canal4rdw);
+					
 
 
 					//movement of back ground
@@ -594,7 +650,7 @@ int main()
 					if(b==10)
 					{
 						backrect.x-=1;
-						canal_move();
+						canal_move();//move canals
 						setcn();
 						
 						b=0;
@@ -665,6 +721,9 @@ int main()
 					//lose();
 					SDL_RenderPresent(gRenderer);
 				} while (movebird(e, quit)&& !*quit);//Tank(e, quit) && !*quit);
+			
+				run=false;
+
 			}
 	}
 

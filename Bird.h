@@ -1,5 +1,4 @@
 
-double degree1 = 0;
 class bird
 {
 public:
