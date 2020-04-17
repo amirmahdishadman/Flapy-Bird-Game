@@ -9,6 +9,7 @@
 #include<SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_mixer.h>
 #include "Bird.h"
+#include "canal.h"
 
 using namespace std;
 
@@ -32,14 +33,9 @@ SDL_Texture* gTexture1 = NULL;
 //for GameOver BMP
 SDL_Texture* gTexture2 = NULL;
 SDL_Texture* gbackgroundT = NULL;
-SDL_Texture* canal1up= NULL;
-SDL_Texture* canal2up= NULL;
-SDL_Texture* canal3up= NULL;
-SDL_Texture* canal4up= NULL;
-SDL_Texture* canal1dw= NULL;
-SDL_Texture* canal2dw= NULL;
-SDL_Texture* canal3dw= NULL;
-SDL_Texture* canal4dw= NULL;
+
+//canal textures in canal.h
+
 SDL_Texture* S1= NULL;
 SDL_Texture* S2= NULL;
 SDL_Texture* S3= NULL;
@@ -57,7 +53,7 @@ SDL_Window* gWindow = NULL;
 
 //The surface contained by the window
 SDL_Surface* gScreenSurface = NULL;
-SDL_Surface* Canal_Surface = NULL;
+
 
 //rects:
 //bird1
@@ -65,15 +61,7 @@ SDL_Rect grect1;
 //Baclground Rects
 SDL_Rect backrect={0,0,2280,800};
 //Up Canals Rects
-SDL_Rect canal1rup={760,-30,152,460};
-SDL_Rect canal2rup={760,-30,152,120};
-SDL_Rect canal3rup={760,-30,152,400};
-SDL_Rect canal4rup={760,-30,152,300};
-//Down Canals Rects
-SDL_Rect canal1rdw={760,630,152,25};
-SDL_Rect canal2rdw={760,290,152,365};
-SDL_Rect canal3rdw={760,570,152,85};
-SDL_Rect canal4rdw={760,470,152,185};
+
 //GameOver Rect
 SDL_Rect GO={80,130,500,500};
 //Points(Scores) Rect
@@ -144,29 +132,29 @@ bool init()
 			}
 			gTexture1 = SDL_CreateTextureFromSurface(gRenderer, gSurface1);
 
-			Canal_Surface = SDL_LoadBMP("Media/canal1up.bmp");
-			canal1up = SDL_CreateTextureFromSurface(gRenderer, Canal_Surface);
+			ca.Canal_Surface = SDL_LoadBMP("Media/canal1up.bmp");
+			ca.canal1up = SDL_CreateTextureFromSurface(gRenderer, ca.Canal_Surface);
 
-			Canal_Surface = SDL_LoadBMP("Media/canal2up.bmp");
-			canal2up = SDL_CreateTextureFromSurface(gRenderer, Canal_Surface);
+			ca.Canal_Surface = SDL_LoadBMP("Media/canal2up.bmp");
+			ca.canal2up = SDL_CreateTextureFromSurface(gRenderer, ca.Canal_Surface);
 
-			Canal_Surface = SDL_LoadBMP("Media/canal3up.bmp");
-			canal3up = SDL_CreateTextureFromSurface(gRenderer, Canal_Surface);
+			ca.Canal_Surface = SDL_LoadBMP("Media/canal3up.bmp");
+			ca.canal3up = SDL_CreateTextureFromSurface(gRenderer, ca.Canal_Surface);
 
-			Canal_Surface = SDL_LoadBMP("Media/canal4up.bmp");
-			canal4up = SDL_CreateTextureFromSurface(gRenderer, Canal_Surface);
+			ca.Canal_Surface = SDL_LoadBMP("Media/canal4up.bmp");
+			ca.canal4up = SDL_CreateTextureFromSurface(gRenderer, ca.Canal_Surface);
 
-			Canal_Surface = SDL_LoadBMP("Media/canal1dw.bmp");
-			canal1dw = SDL_CreateTextureFromSurface(gRenderer, Canal_Surface);
+			ca.Canal_Surface = SDL_LoadBMP("Media/canal1dw.bmp");
+			ca.canal1dw = SDL_CreateTextureFromSurface(gRenderer, ca.Canal_Surface);
 
-			Canal_Surface = SDL_LoadBMP("Media/canal2dw.bmp");
-			canal2dw = SDL_CreateTextureFromSurface(gRenderer, Canal_Surface);
+			ca.Canal_Surface = SDL_LoadBMP("Media/canal2dw.bmp");
+			ca.canal2dw = SDL_CreateTextureFromSurface(gRenderer, ca.Canal_Surface);
 
-			Canal_Surface = SDL_LoadBMP("Media/canal3dw.bmp");
-			canal3dw = SDL_CreateTextureFromSurface(gRenderer, Canal_Surface);
+			ca.Canal_Surface = SDL_LoadBMP("Media/canal3dw.bmp");
+			ca.canal3dw = SDL_CreateTextureFromSurface(gRenderer, ca.Canal_Surface);
 
-			Canal_Surface = SDL_LoadBMP("Media/canal4dw.bmp");
-			canal4dw = SDL_CreateTextureFromSurface(gRenderer, Canal_Surface);
+			ca.Canal_Surface = SDL_LoadBMP("Media/canal4dw.bmp");
+			ca.canal4dw = SDL_CreateTextureFromSurface(gRenderer, ca.Canal_Surface);
 
 			//Scores media
 			S0 = IMG_LoadTexture(gRenderer, "Numbers/0.png");
@@ -209,49 +197,49 @@ bool checkcollision()
 {
 	if (Gameover == false)
 	{
-		if (SDL_HasIntersection(&grect1, &canal1rup) == true)
+		if (SDL_HasIntersection(&grect1, &ca.canal1rup) == true)
 		{
 			bird1.lose = true;
 			Mix_PlayChannel(-1, Lose_sound, 0);
 			return false;
 		}
-		if (SDL_HasIntersection(&grect1, &canal1rdw) == true)
+		if (SDL_HasIntersection(&grect1, &ca.canal1rdw) == true)
 		{
 			bird1.lose = true;
 			Mix_PlayChannel(-1, Lose_sound, 0);
 			return false;
 		}
-		if (SDL_HasIntersection(&grect1, &canal2rup) == true)
+		if (SDL_HasIntersection(&grect1, &ca.canal2rup) == true)
 		{
 			bird1.lose = true;
 			Mix_PlayChannel(-1, Lose_sound, 0);
 			return false;
 		}
-		if (SDL_HasIntersection(&grect1, &canal2rdw) == true)
+		if (SDL_HasIntersection(&grect1, &ca.canal2rdw) == true)
 		{
 			bird1.lose = true;
 			Mix_PlayChannel(-1, Lose_sound, 0);
 			return false;
 		}
-		if (SDL_HasIntersection(&grect1, &canal3rup) == true)
+		if (SDL_HasIntersection(&grect1, &ca.canal3rup) == true)
 		{
 			bird1.lose = true;
 			Mix_PlayChannel(-1, Lose_sound, 0);
 			return false;
 		}
-		if (SDL_HasIntersection(&grect1, &canal3rdw) == true)
+		if (SDL_HasIntersection(&grect1, &ca.canal3rdw) == true)
 		{
 			bird1.lose = true;
 			Mix_PlayChannel(-1, Lose_sound, 0);
 			return false;
 		}
-		if (SDL_HasIntersection(&grect1, &canal4rup) == true)
+		if (SDL_HasIntersection(&grect1, &ca.canal4rup) == true)
 		{
 			bird1.lose = true;
 			Mix_PlayChannel(-1, Lose_sound, 0);
 			return false;
 		}
-		if (SDL_HasIntersection(&grect1, &canal4rdw) == true)
+		if (SDL_HasIntersection(&grect1, &ca.canal4rdw) == true)
 		{
 			bird1.lose = true;
 			Mix_PlayChannel(-1, Lose_sound, 0);
@@ -438,15 +426,15 @@ void canal_move()
 		{
 		case 1:
 		{
-			canal1rdw.x -= speed;
-			canal1rup.x -= speed;
-			if (canal1rup.x < -152)
+			ca.canal1rdw.x -= speed;
+			ca.canal1rup.x -= speed;
+			if (ca.canal1rup.x < -152)
 			{
-				canal1rup.x = 760;
-				canal1rdw.x = 760;
+				ca.canal1rup.x = 760;
+				ca.canal1rdw.x = 760;
 				endcanal1 = false;
 			}
-			if (canal1rup.x == grect1.x - 150)
+			if (ca.canal1rup.x == grect1.x - 150)
 			{
 				POINTS++;
 				Mix_PlayChannel(-1, Point, 0);
@@ -458,15 +446,15 @@ void canal_move()
 
 		case 2:
 		{
-			canal2rdw.x -= speed;
-			canal2rup.x -= speed;
-			if (canal2rup.x < -152)
+			ca.canal2rdw.x -= speed;
+			ca.canal2rup.x -= speed;
+			if (ca.canal2rup.x < -152)
 			{
-				canal2rup.x = 760;
-				canal2rdw.x = 760;
+				ca.canal2rup.x = 760;
+				ca.canal2rdw.x = 760;
 				endcanal1 = false;
 			}
-			if (canal2rup.x == grect1.x - 150)
+			if (ca.canal2rup.x == grect1.x - 150)
 			{
 				POINTS++;
 				Mix_PlayChannel(-1, Point, 0);
@@ -476,15 +464,15 @@ void canal_move()
 
 		case 3:
 		{
-			canal3rdw.x -= speed;
-			canal3rup.x -= speed;
-			if (canal3rup.x < -152)
+			ca.canal3rdw.x -= speed;
+			ca.canal3rup.x -= speed;
+			if (ca.canal3rup.x < -152)
 			{
-				canal3rup.x = 760;
-				canal3rdw.x = 760;
+				ca.canal3rup.x = 760;
+				ca.canal3rdw.x = 760;
 				endcanal1 = false;
 			}
-			if ( canal3rup.x == grect1.x - 150)
+			if (ca.canal3rup.x == grect1.x - 150)
 			{
 				POINTS++;
 				Mix_PlayChannel(-1, Point, 0);
@@ -494,15 +482,15 @@ void canal_move()
 
 		case 4:
 		{
-			canal4rdw.x -= speed;
-			canal4rup.x -= speed;
-			if (canal4rup.x < -152)
+			ca.canal4rdw.x -= speed;
+			ca.canal4rup.x -= speed;
+			if (ca.canal4rup.x < -152)
 			{
-				canal4rup.x = 760;
-				canal4rdw.x = 760;
+				ca.canal4rup.x = 760;
+				ca.canal4rdw.x = 760;
 				endcanal1 = false;
 			}
-			if (canal4rup.x == grect1.x - 150)
+			if (ca.canal4rup.x == grect1.x - 150)
 			{
 				POINTS++;
 				Mix_PlayChannel(-1, Point, 0);
@@ -561,7 +549,7 @@ void GameOver(SDL_Event e, bool *quit)
 		{
 			gSurface1 = SDL_LoadBMP("Media/Bird2.bmp");
 		}
-		gTexture1 = SDL_CreateTextureFromSurface(gRenderer, gSurface1);
+		
 		Mix_PlayMusic(gMusic, -1);
 		bird1.x = 340;
     	bird1.y = 360;
@@ -572,40 +560,42 @@ void GameOver(SDL_Event e, bool *quit)
 		case 1:
 		{
 
-			canal1rup.x = 760;
-			canal1rdw.x = 760;
+			ca.canal1rup.x = 760;
+			ca.canal1rdw.x = 760;
 			break;
 		}
 
 		case 2:
 		{
 
-			canal2rup.x = 760;
-			canal2rdw.x = 760;
+			ca.canal2rup.x = 760;
+			ca.canal2rdw.x = 760;
 
 			break;
 		}
 
 		case 3:
 		{
-			canal3rup.x = 760;
-			canal3rdw.x = 760;
+			ca.canal3rup.x = 760;
+			ca.canal3rdw.x = 760;
 			break;
 		}
 
 		case 4:
 		{
-			canal4rup.x = 760;
-			canal4rdw.x = 760;
+			ca.canal4rup.x = 760;
+			ca.canal4rdw.x = 760;
 			break;
 		}
 		}
+		gTexture1 = SDL_CreateTextureFromSurface(gRenderer, gSurface1);
 		loadendemage=false;
 	}
 }
 
 int main()
 {
+	POINTS=19;
 	loadendemage=false;
 	run = true;
 	srand(time(0));
@@ -644,14 +634,14 @@ int main()
 			{
 				//grect1 = {bird1.x , bird1.y , 60, 60};
 				SDL_RenderCopy(gRenderer, gbackgroundT, NULL, &backrect);
-				SDL_RenderCopy(gRenderer, canal1up, NULL, &canal1rup);
-				SDL_RenderCopy(gRenderer, canal2up, NULL, &canal2rup);
-				SDL_RenderCopy(gRenderer, canal3up, NULL, &canal3rup);
-				SDL_RenderCopy(gRenderer, canal4up, NULL, &canal4rup);
-				SDL_RenderCopy(gRenderer, canal1dw, NULL, &canal1rdw);
-				SDL_RenderCopy(gRenderer, canal2dw, NULL, &canal2rdw);
-				SDL_RenderCopy(gRenderer, canal3dw, NULL, &canal3rdw);
-				SDL_RenderCopy(gRenderer, canal4dw, NULL, &canal4rdw);
+				SDL_RenderCopy(gRenderer, ca.canal1up, NULL, &ca.canal1rup);
+				SDL_RenderCopy(gRenderer, ca.canal2up, NULL, &ca.canal2rup);
+				SDL_RenderCopy(gRenderer, ca.canal3up, NULL, &ca.canal3rup);
+				SDL_RenderCopy(gRenderer, ca.canal4up, NULL, &ca.canal4rup);
+				SDL_RenderCopy(gRenderer, ca.canal1dw, NULL, &ca.canal1rdw);
+				SDL_RenderCopy(gRenderer, ca.canal2dw, NULL, &ca.canal2rdw);
+				SDL_RenderCopy(gRenderer, ca.canal3dw, NULL, &ca.canal3rdw);
+				SDL_RenderCopy(gRenderer, ca.canal4dw, NULL, &ca.canal4rdw);
 				SDL_RenderCopy(gRenderer, gTexture2, NULL, &GO);
 				Points();
 
@@ -666,7 +656,10 @@ int main()
 
 					b = 0;
 				}
-
+				if(POINTS==20)
+				{
+					*quit=true;
+				}
 				if (backrect.x < -1520)
 				{
 					backrect.x = 0;
