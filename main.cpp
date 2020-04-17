@@ -15,6 +15,7 @@ using namespace std;
 
 bool run;
 bool Gameover;
+int POINTS = 0;
 bool loadendemage=false;
 bool StartGame = true;
 int cn=0;//use for random canals
@@ -39,6 +40,16 @@ SDL_Texture* canal1dw= NULL;
 SDL_Texture* canal2dw= NULL;
 SDL_Texture* canal3dw= NULL;
 SDL_Texture* canal4dw= NULL;
+SDL_Texture* S1= NULL;
+SDL_Texture* S2= NULL;
+SDL_Texture* S3= NULL;
+SDL_Texture* S4= NULL;
+SDL_Texture* S5= NULL;
+SDL_Texture* S6= NULL;
+SDL_Texture* S7= NULL;
+SDL_Texture* S8= NULL;
+SDL_Texture* S9= NULL;
+SDL_Texture* S0= NULL;
 
 
 //The window we'll be rendering to
@@ -54,10 +65,10 @@ SDL_Rect grect1;
 //Baclground Rects
 SDL_Rect backrect={0,0,2280,800};
 //Up Canals Rects
-SDL_Rect canal1rup={760,0,152,460};
-SDL_Rect canal2rup={760,0,152,120};
-SDL_Rect canal3rup={760,0,152,400};
-SDL_Rect canal4rup={760,0,152,300};
+SDL_Rect canal1rup={760,-30,152,460};
+SDL_Rect canal2rup={760,-30,152,120};
+SDL_Rect canal3rup={760,-30,152,400};
+SDL_Rect canal4rup={760,-30,152,300};
 //Down Canals Rects
 SDL_Rect canal1rdw={760,630,152,25};
 SDL_Rect canal2rdw={760,290,152,365};
@@ -65,6 +76,9 @@ SDL_Rect canal3rdw={760,570,152,85};
 SDL_Rect canal4rdw={760,470,152,185};
 //GameOver Rect
 SDL_Rect GO={80,130,500,500};
+//Points(Scores) Rect
+SDL_Rect score1={0,0,40,50};
+SDL_Rect score2={50,0,40,50};
 
 
 
@@ -153,6 +167,18 @@ bool init()
 
 			Canal_Surface = SDL_LoadBMP("Media/canal4dw.bmp");
 			canal4dw = SDL_CreateTextureFromSurface(gRenderer, Canal_Surface);
+
+			//Scores media
+			S0 = IMG_LoadTexture(gRenderer, "Numbers/0.png");
+			S1 = IMG_LoadTexture(gRenderer, "Numbers/1.png");
+			S2 = IMG_LoadTexture(gRenderer, "Numbers/2.png");
+			S3 = IMG_LoadTexture(gRenderer, "Numbers/3.png");
+			S4 = IMG_LoadTexture(gRenderer, "Numbers/4.png");
+			S5 = IMG_LoadTexture(gRenderer, "Numbers/5.png");
+			S6 = IMG_LoadTexture(gRenderer, "Numbers/6.png");
+			S7 = IMG_LoadTexture(gRenderer, "Numbers/7.png");
+			S8 = IMG_LoadTexture(gRenderer, "Numbers/8.png");
+			S9 = IMG_LoadTexture(gRenderer, "Numbers/9.png");
 
 			bird1.x = 340;
     		bird1.y = 360;
@@ -294,6 +320,87 @@ bool movebird(SDL_Event e, bool *quit)
 	return checkcollision();
 }
 
+void Points()
+{
+	switch (POINTS)
+	{
+	case 0:
+		SDL_RenderCopy(gRenderer, S0, NULL, &score1);
+		break;
+	case 1:
+		SDL_RenderCopy(gRenderer, S1, NULL, &score1);
+		break;
+	case 2:
+		SDL_RenderCopy(gRenderer, S2, NULL, &score1);
+		break;
+	case 3:
+		SDL_RenderCopy(gRenderer, S3, NULL, &score1);
+		break;
+	case 4:
+		SDL_RenderCopy(gRenderer, S4, NULL, &score1);
+		break;
+	case 5:
+		SDL_RenderCopy(gRenderer, S5, NULL, &score1);
+		break;
+	case 6:
+		SDL_RenderCopy(gRenderer, S6, NULL, &score1);
+		break;
+	case 7:
+		SDL_RenderCopy(gRenderer, S7, NULL, &score1);
+		break;
+	case 8:
+		SDL_RenderCopy(gRenderer, S8, NULL, &score1);
+		break;
+	case 9:
+		SDL_RenderCopy(gRenderer, S9, NULL, &score1);
+		break;
+	case 10:
+		SDL_RenderCopy(gRenderer, S1, NULL, &score1);
+		SDL_RenderCopy(gRenderer, S0, NULL, &score2);
+		break;
+	case 11:
+		SDL_RenderCopy(gRenderer, S1, NULL, &score1);
+		SDL_RenderCopy(gRenderer, S1, NULL, &score2);
+		break;
+	case 12:
+		SDL_RenderCopy(gRenderer, S1, NULL, &score1);
+		SDL_RenderCopy(gRenderer, S2, NULL, &score2);
+		break;
+	case 13:
+		SDL_RenderCopy(gRenderer, S1, NULL, &score1);
+		SDL_RenderCopy(gRenderer, S3, NULL, &score2);
+		break;
+	case 14:
+		SDL_RenderCopy(gRenderer, S1, NULL, &score1);
+		SDL_RenderCopy(gRenderer, S4, NULL, &score2);
+		break;
+	case 15:
+		SDL_RenderCopy(gRenderer, S1, NULL, &score1);
+		SDL_RenderCopy(gRenderer, S5, NULL, &score2);
+		break;
+	case 16:
+		SDL_RenderCopy(gRenderer, S1, NULL, &score1);
+		SDL_RenderCopy(gRenderer, S6, NULL, &score2);
+		break;
+	case 17:
+		SDL_RenderCopy(gRenderer, S1, NULL, &score1);
+		SDL_RenderCopy(gRenderer, S7, NULL, &score2);
+		break;
+	case 18:
+		SDL_RenderCopy(gRenderer, S1, NULL, &score1);
+		SDL_RenderCopy(gRenderer, S8, NULL, &score2);
+		break;
+	case 19:
+		SDL_RenderCopy(gRenderer, S1, NULL, &score1);
+		SDL_RenderCopy(gRenderer, S9, NULL, &score2);
+		break;
+	case 20:
+		SDL_RenderCopy(gRenderer, S2, NULL, &score1);
+		SDL_RenderCopy(gRenderer, S0, NULL, &score2);
+		break;
+	}
+}
+
 bool endcanal1=false;
 bool endcanal2=false;//ezaf
 int canalnum=0;
@@ -339,6 +446,12 @@ void canal_move()
 				canal1rdw.x = 760;
 				endcanal1 = false;
 			}
+			if (canal1rup.x == grect1.x - 150)
+			{
+				POINTS++;
+				Mix_PlayChannel(-1, Point, 0);
+			}
+			
 
 			break;
 		}
@@ -353,7 +466,11 @@ void canal_move()
 				canal2rdw.x = 760;
 				endcanal1 = false;
 			}
-
+			if (canal2rup.x == grect1.x - 150)
+			{
+				POINTS++;
+				Mix_PlayChannel(-1, Point, 0);
+			}
 			break;
 		}
 
@@ -367,7 +484,11 @@ void canal_move()
 				canal3rdw.x = 760;
 				endcanal1 = false;
 			}
-
+			if ( canal3rup.x == grect1.x - 150)
+			{
+				POINTS++;
+				Mix_PlayChannel(-1, Point, 0);
+			}
 			break;
 		}
 
@@ -381,7 +502,11 @@ void canal_move()
 				canal4rdw.x = 760;
 				endcanal1 = false;
 			}
-
+			if (canal4rup.x == grect1.x - 150)
+			{
+				POINTS++;
+				Mix_PlayChannel(-1, Point, 0);
+			}
 			break;
 		}
 		}
@@ -402,6 +527,7 @@ void GameOver(SDL_Event e, bool *quit)
 	
 	GO.h = 450;
 	GO.w = 600;
+	POINTS = 0;
 	Gameover = true;
 	// StartGame = false;
 	gSurface1 = SDL_LoadBMP("Media/GO.bmp");
@@ -527,12 +653,14 @@ int main()
 				SDL_RenderCopy(gRenderer, canal3dw, NULL, &canal3rdw);
 				SDL_RenderCopy(gRenderer, canal4dw, NULL, &canal4rdw);
 				SDL_RenderCopy(gRenderer, gTexture2, NULL, &GO);
+				Points();
 
 				//movement of back ground
 				b++;
 				if (b == 10)
 				{
 					backrect.x -= 1;
+					if(start)
 					canal_move(); //move canals
 					setcn();
 
