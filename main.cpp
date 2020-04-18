@@ -5,75 +5,68 @@
 #include <cmath>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-//#include <SDL2/SDL_ttf.h>
-#include<SDL2/SDL2_gfxPrimitives.h>
+#include <SDL2/SDL2_gfxPrimitives.h>
 #include <SDL2/SDL_mixer.h>
 #include "Bird.h"
 #include "canal.h"
 
 using namespace std;
 
-
 bool run;
 bool Gameover;
 int POINTS = 0;
-bool loadendemage=false;
+bool loadendemage = false;
 bool StartGame = true;
-int cn=0;//use for random canals
-int cn2=0;//use for random day and night
+int cn = 0;	 //use for random canals
+int cn2 = 0; //use for random day and night
 
 const int SCREEN_WIDTH = 760;
 const int SCREEN_HEIGHT = 800;
 //renderer
 SDL_Renderer *gRenderer = NULL;
 
-
 //textures
-SDL_Texture* gTexture1 = NULL;
+SDL_Texture *gTexture1 = NULL;
 //for GameOver BMP
-SDL_Texture* gTexture2 = NULL;
-SDL_Texture* gbackgroundT = NULL;
+SDL_Texture *gTexture2 = NULL;
+SDL_Texture *gbackgroundT = NULL;
 
 //canal textures in canal.h
 
-SDL_Texture* S1= NULL;
-SDL_Texture* S2= NULL;
-SDL_Texture* S3= NULL;
-SDL_Texture* S4= NULL;
-SDL_Texture* S5= NULL;
-SDL_Texture* S6= NULL;
-SDL_Texture* S7= NULL;
-SDL_Texture* S8= NULL;
-SDL_Texture* S9= NULL;
-SDL_Texture* S0= NULL;
-
+SDL_Texture *S1 = NULL;
+SDL_Texture *S2 = NULL;
+SDL_Texture *S3 = NULL;
+SDL_Texture *S4 = NULL;
+SDL_Texture *S5 = NULL;
+SDL_Texture *S6 = NULL;
+SDL_Texture *S7 = NULL;
+SDL_Texture *S8 = NULL;
+SDL_Texture *S9 = NULL;
+SDL_Texture *S0 = NULL;
 
 //The window we'll be rendering to
-SDL_Window* gWindow = NULL;
+SDL_Window *gWindow = NULL;
 
 //The surface contained by the window
-SDL_Surface* gScreenSurface = NULL;
-
+SDL_Surface *gScreenSurface = NULL;
 
 //rects:
 //bird1
 SDL_Rect grect1;
 //Baclground Rects
-SDL_Rect backrect={0,0,2280,800};
+SDL_Rect backrect = {0, 0, 2280, 800};
 //Up Canals Rects
 
 //GameOver Rect
-SDL_Rect GO={80,130,500,500};
+SDL_Rect GO = {80, 130, 500, 500};
 //Points(Scores) Rect
-SDL_Rect score1={0,0,40,50};
-SDL_Rect score2={50,0,40,50};
-
-
+SDL_Rect score1 = {0, 0, 40, 50};
+SDL_Rect score2 = {50, 0, 40, 50};
 
 //Surface for loading png images (except map)
-SDL_Surface* gSurface1 = NULL; //bird1
-SDL_Surface* canalsurface= NULL;
-SDL_Surface* background=NULL;
+SDL_Surface *gSurface1 = NULL; //bird1
+SDL_Surface *canalsurface = NULL;
+SDL_Surface *background = NULL;
 
 //keyboard states
 const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -89,19 +82,19 @@ Mix_Chunk *Point = NULL;
 bool init()
 {
 
-    //Initialization flag
+	//Initialization flag
 	bool success = true;
 
 	//Initialize SDL
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		printf( "SDL could not initialize! SDL_Error: %s\n", SDL_GetError() );
+		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
 		success = false;
 	}
 	else
 	{
 		//Create window
-		gWindow = SDL_CreateWindow( "Fat Bird", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
+		gWindow = SDL_CreateWindow("Fat Bird", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 		gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
 
 		//Initialise SDL_mixer and Music
@@ -113,20 +106,20 @@ bool init()
 		gMusic = Mix_LoadMUS("Media/Martik_Parandeh.wav");
 		Lose_sound = Mix_LoadWAV("Media/hit.wav");
 		Point = Mix_LoadWAV("Media/point.wav");
-		
-		if( gWindow == NULL )
+
+		if (gWindow == NULL)
 		{
-			printf( "Window could not be created! SDL_Error: %s\n", SDL_GetError() );
+			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			success = false;
 		}
 		else
 		{
 			//Get window surface
-			if(cn2==1)
+			if (cn2 == 1)
 			{
 				gSurface1 = SDL_LoadBMP("Media/bird11.bmp");
 			}
-			if(cn2==2)
+			if (cn2 == 2)
 			{
 				gSurface1 = SDL_LoadBMP("Media/Bird2.bmp");
 			}
@@ -169,7 +162,7 @@ bool init()
 			S9 = IMG_LoadTexture(gRenderer, "Numbers/9.png");
 
 			bird1.x = 340;
-    		bird1.y = 360;
+			bird1.y = 360;
 			grect1.x = bird1.x;
 			grect1.y = bird1.y;
 		}
@@ -181,16 +174,16 @@ bool init()
 void loadMedia()
 {
 	//Load random image
-	if(cn2==1)
+	if (cn2 == 1)
 	{
 		background = SDL_LoadBMP("Media/daybackground1.bmp");
 	}
-	if(cn2==2)
+	if (cn2 == 2)
 	{
 		background = SDL_LoadBMP("Media/daybackground2.bmp");
 	}
-  			
-   	gbackgroundT = SDL_CreateTextureFromSurface(gRenderer, background);
+
+	gbackgroundT = SDL_CreateTextureFromSurface(gRenderer, background);
 }
 
 bool checkcollision()
@@ -247,14 +240,14 @@ bool checkcollision()
 		}
 
 		//up wall
-		if (grect1.y<0)
+		if (grect1.y < 0)
 		{
 			bird1.lose = true;
 			Mix_PlayChannel(-1, Lose_sound, 0);
 			return false;
 		}
 		//ground
-		if (grect1.y>600)
+		if (grect1.y > 600)
 		{
 			bird1.lose = true;
 			Mix_PlayChannel(-1, Lose_sound, 0);
@@ -389,9 +382,9 @@ void Points()
 	}
 }
 
-bool endcanal1=false;
-bool endcanal2=false;//ezaf
-int canalnum=0;
+bool endcanal1 = false;
+bool endcanal2 = false; //ezaf
+int canalnum = 0;
 
 void canal_move()
 {
@@ -439,7 +432,6 @@ void canal_move()
 				POINTS++;
 				Mix_PlayChannel(-1, Point, 0);
 			}
-			
 
 			break;
 		}
@@ -512,31 +504,30 @@ void setcn2()
 
 void GameOver(SDL_Event e, bool *quit)
 {
-	
+
 	GO.h = 450;
 	GO.w = 600;
 	POINTS = 0;
 	Gameover = true;
 	// StartGame = false;
 	gSurface1 = SDL_LoadBMP("Media/GO.bmp");
-	if(loadendemage==false)
+	if (loadendemage == false)
 	{
-	gTexture2 = SDL_CreateTextureFromSurface(gRenderer, gSurface1);
-	
-	loadendemage=true;
+		gTexture2 = SDL_CreateTextureFromSurface(gRenderer, gSurface1);
+
+		loadendemage = true;
 	}
 	SDL_FreeSurface(gSurface1);
 	SDL_DestroyTexture(gTexture1);
-	
-	
+
 	SDL_PollEvent(&e);
-		if (e.type == SDL_QUIT)
-		{
-			*quit = true;
-		}
+	if (e.type == SDL_QUIT)
+	{
+		*quit = true;
+	}
 	if (e.type == SDL_KEYDOWN && e.key.keysym.sym == SDLK_SPACE)
 	{
-		start=false;
+		start = false;
 		SDL_DestroyTexture(gTexture2);
 		GO.h = 0;
 		GO.w = 0;
@@ -549,10 +540,10 @@ void GameOver(SDL_Event e, bool *quit)
 		{
 			gSurface1 = SDL_LoadBMP("Media/Bird2.bmp");
 		}
-		
+
 		Mix_PlayMusic(gMusic, -1);
 		bird1.x = 340;
-    	bird1.y = 360;
+		bird1.y = 360;
 		grect1.x = bird1.x;
 		grect1.y = bird1.y;
 		switch (canalnum)
@@ -589,14 +580,13 @@ void GameOver(SDL_Event e, bool *quit)
 		}
 		}
 		gTexture1 = SDL_CreateTextureFromSurface(gRenderer, gSurface1);
-		loadendemage=false;
+		loadendemage = false;
 	}
 }
 
 int main()
 {
-	POINTS=19;
-	loadendemage=false;
+	loadendemage = false;
 	run = true;
 	srand(time(0));
 	setcn2();
@@ -632,7 +622,6 @@ int main()
 			int b = 0; //for move ment of back ground
 			do
 			{
-				//grect1 = {bird1.x , bird1.y , 60, 60};
 				SDL_RenderCopy(gRenderer, gbackgroundT, NULL, &backrect);
 				SDL_RenderCopy(gRenderer, ca.canal1up, NULL, &ca.canal1rup);
 				SDL_RenderCopy(gRenderer, ca.canal2up, NULL, &ca.canal2rup);
@@ -650,15 +639,15 @@ int main()
 				if (b == 10)
 				{
 					backrect.x -= 1;
-					if(start)
-					canal_move(); //move canals
+					if (start)
+						canal_move(); //move canals
 					setcn();
 
 					b = 0;
 				}
-				if(POINTS==20)
+				if (POINTS == 20)
 				{
-					*quit=true;
+					*quit = true;
 				}
 				if (backrect.x < -1520)
 				{
@@ -669,8 +658,8 @@ int main()
 				SDL_RenderCopy(gRenderer, gTexture1, NULL, &grect1);
 				SDL_RenderPresent(gRenderer);
 				if (movebird(e, quit) == false)
-				{			
-					GameOver(e,quit);
+				{
+					GameOver(e, quit);
 				}
 			} while (!*quit);
 
